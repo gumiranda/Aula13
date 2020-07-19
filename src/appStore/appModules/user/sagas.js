@@ -1,7 +1,8 @@
-import {all, takeLatest, call, put} from 'redux-saga/effects';
+import {all, takeLatest, call, put, select} from 'redux-saga/effects';
 import {Alert} from 'react-native';
 import api from '../../../services/api';
 import {updateProfileSuccess, updateProfileFailure} from './actions';
+import {getSuccess, getFailure} from './list';
 
 export function* updateProfile({payload}) {
   try {
@@ -62,8 +63,34 @@ export function* completeProfile({payload}) {
     yield put(updateProfileFailure());
   }
 }
+export function* getUsers({payload}) {
+  try {
+    const {nextPage, page} = payload;
+    const response = yield call(api.get, `user/page/${page}`);
+    if (response.data) {
+      const {usersCount, users} = response.data;
+      if (!nextPage) {
+        yield put(getSuccess({usersList: users, usersTotal: usersCount}));
+      } else {
+        const {usersList} = yield select(state => state.user);
+        yield put(
+          getSuccess({
+            usersList: [...usersList, ...users],
+            usersTotal: usersCount,
+          }),
+        );
+      }
+    } else {
+      yield put(getFailure());
+    }
+  } catch (err) {
+    Alert.alert('Erro', 'Confira seus dados');
+    yield put(getFailure());
+  }
+}
 
 export default all([
   takeLatest('@user/UPDATE_PROFILE_REQUEST', updateProfile),
+  takeLatest('@user/LIST_REQUEST', getUsers),
   takeLatest('@user/COMPLETE_PROFILE_REQUEST', completeProfile),
 ]);

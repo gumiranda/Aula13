@@ -16,7 +16,8 @@ export const SignLinkText = styled.Text`
 `;
 export const CardUser = styled.View`
   margin-bottom: 15px;
-  padding: 30px;
+  padding-horizontal: 30px;
+  padding-vertical: 15px;
   border-radius: 4px;
   background: #fff;
   display: flex;
@@ -30,7 +31,7 @@ export const Left = styled.View`
   align-items: center;
 `;
 export const Info = styled.View`
-  margin-left: 15px;
+  margin-left: 25px;
 `;
 export const Avatar = styled.Image`
   width: 50px;

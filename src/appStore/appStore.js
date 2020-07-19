@@ -5,6 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 import {createLogger} from 'redux-logger';
 import auth from './appModules/auth/reducer';
 import user from './appModules/user/reducer';
+import chat from './appModules/chat/reducer';
 import creditcard from './appModules/creditcard/reducer';
 import appSagas from './appSagas';
 
@@ -22,7 +23,7 @@ const persistConfig = {
   whitelist: ['auth', 'user'],
 };
 
-const rootReducer = combineReducers({auth, user, creditcard});
+const rootReducer = combineReducers({auth, user, chat, creditcard});
 const appStore = createStore(
   persistReducer(persistConfig, rootReducer),
   enhancer,
